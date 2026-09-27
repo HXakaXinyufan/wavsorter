@@ -1,4 +1,8 @@
-export default class TripleSBiasSorter {
+/**
+ * Generic pairwise merge-sort ranking engine used by WAV Sorter.
+ * It has no dependency on images, Discord APIs, or tripleS member data.
+ */
+export default class WavSorter {
   #lstMember = [];
   #parent = [];
   #equal = [];
@@ -13,31 +17,37 @@ export default class TripleSBiasSorter {
   #finishSize = 0;
   #finishFlag = 0;
 
-  constructor(memberNames, memberData = {}) {
+  constructor(memberNames) {
     if (!Array.isArray(memberNames)) {
       throw new Error("Member names must be an array");
     }
-    if (typeof memberData !== "object" || memberData === null) {
-      throw new Error("Member data must be an object");
+    if (memberNames.some((name) => typeof name !== "string")) {
+      throw new Error("Every member name must be a string");
     }
 
     this.memberNames = [...memberNames];
-    this.memberData = memberData;
-
     this.initialize();
   }
 
   get equal() {
-    return this.#equal;
+    return [...this.#equal];
   }
 
   initialize() {
     if (this.memberNames.length <= 1) {
       this.#finishFlag = 1;
-      this.#lstMember = [this.memberNames.map((_, i) => i)];
+      this.#lstMember = [this.memberNames.map((_, index) => index)];
+      this.#parent = [-1];
+      this.#equal = new Array(this.memberNames.length + 1).fill(-1);
+      this.#rec = new Array(this.memberNames.length).fill(0);
+      this.#cmp1 = -1;
+      this.#cmp2 = -1;
+      this.#head1 = 0;
+      this.#head2 = 0;
+      this.#nrec = 0;
+      this.#numQuestion = 0;
       this.#totalSize = 0;
       this.#finishSize = 0;
-      this.#numQuestion = 0;
       return;
     }
 
@@ -52,7 +62,6 @@ export default class TripleSBiasSorter {
     this.#rec = new Array(this.memberNames.length).fill(0);
     this.#nrec = 0;
     this.#equal = new Array(this.memberNames.length + 1).fill(-1);
-
     this.#cmp1 = this.#lstMember.length - 2;
     this.#cmp2 = this.#lstMember.length - 1;
     this.#head1 = 0;
@@ -63,10 +72,12 @@ export default class TripleSBiasSorter {
   }
 
   getCurrentComparison() {
-    if (this.#cmp1 < 0) return null;
+    if (this.isComplete() || this.#cmp1 < 0) return null;
 
     const memberAIndex = this.#lstMember[this.#cmp1][this.#head1];
     const memberBIndex = this.#lstMember[this.#cmp2][this.#head2];
+
+    if (memberAIndex === undefined || memberBIndex === undefined) return null;
 
     return {
       memberA: memberAIndex,
@@ -84,13 +95,13 @@ export default class TripleSBiasSorter {
     this.#applyComparisonResult(1);
   }
 
+  // Kept in the engine for compatibility even though the WAV UI has no tie button.
   declareTie() {
     this.#applyComparisonResult(0);
   }
 
   getSortedMembers() {
     if (!this.isComplete()) return [];
-
     return this.#lstMember[0].map((index) => this.memberNames[index]);
   }
 
@@ -99,9 +110,10 @@ export default class TripleSBiasSorter {
   }
 
   getProgress() {
-    const progressPercent = Math.floor(
-      (this.#finishSize * 100) / this.#totalSize,
-    );
+    const progressPercent = this.#totalSize === 0
+      ? (this.isComplete() ? 100 : 0)
+      : Math.min(100, Math.floor((this.#finishSize * 100) / this.#totalSize));
+
     return {
       currentQuestion: this.#numQuestion,
       progressPercent,
@@ -115,10 +127,10 @@ export default class TripleSBiasSorter {
     this.initialize();
   }
 
-  // --- NEW UNDO LOGIC ---
+  /** Return a serializable snapshot used by Undo and local autosave. */
   getState() {
     return {
-      lstMember: JSON.parse(JSON.stringify(this.#lstMember)),
+      lstMember: this.#lstMember.map((list) => [...list]),
       parent: [...this.#parent],
       equal: [...this.#equal],
       rec: [...this.#rec],
@@ -130,12 +142,31 @@ export default class TripleSBiasSorter {
       numQuestion: this.#numQuestion,
       totalSize: this.#totalSize,
       finishSize: this.#finishSize,
-      finishFlag: this.#finishFlag
+      finishFlag: this.#finishFlag,
     };
   }
 
+  /** Restore a snapshot previously returned by getState(). */
   restoreState(state) {
-    this.#lstMember = JSON.parse(JSON.stringify(state.lstMember));
+    if (
+      !state ||
+      !Array.isArray(state.lstMember) ||
+      !Array.isArray(state.parent) ||
+      !Array.isArray(state.equal) ||
+      !Array.isArray(state.rec)
+    ) {
+      throw new Error("Invalid sorter state");
+    }
+
+    const numericFields = [
+      "cmp1", "cmp2", "head1", "head2", "nrec", "numQuestion",
+      "totalSize", "finishSize", "finishFlag",
+    ];
+    if (numericFields.some((key) => !Number.isFinite(state[key]))) {
+      throw new Error("Invalid sorter state");
+    }
+
+    this.#lstMember = state.lstMember.map((list) => [...list]);
     this.#parent = [...state.parent];
     this.#equal = [...state.equal];
     this.#rec = [...state.rec];
@@ -149,12 +180,43 @@ export default class TripleSBiasSorter {
     this.#finishSize = state.finishSize;
     this.#finishFlag = state.finishFlag;
   }
-  // -----------------------
 
-  #shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
+  /** Useful when loading a previously completed ranking. */
+  markCompleteWithOrder(orderNames) {
+    if (!Array.isArray(orderNames) || orderNames.length !== this.memberNames.length) {
+      throw new Error("Completed order must contain every selected WAV exactly once");
+    }
+
+    const indexByName = new Map(this.memberNames.map((name, index) => [name, index]));
+    const seen = new Set();
+    const indices = orderNames.map((name) => {
+      const index = indexByName.get(name);
+      if (index === undefined || seen.has(name)) {
+        throw new Error(`Unknown or duplicate WAV: ${name}`);
+      }
+      seen.add(name);
+      return index;
+    });
+
+    this.#lstMember = [indices];
+    this.#parent = [-1];
+    this.#equal = new Array(this.memberNames.length + 1).fill(-1);
+    this.#rec = new Array(this.memberNames.length).fill(0);
+    this.#cmp1 = -1;
+    this.#cmp2 = -1;
+    this.#head1 = 0;
+    this.#head2 = 0;
+    this.#nrec = 0;
+    this.#numQuestion = 0;
+    this.#totalSize = 0;
+    this.#finishSize = 0;
+    this.#finishFlag = 1;
+  }
+
+  #shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+      [array[i], array[j]] = [array[j], array[i]];
     }
   }
 
@@ -227,9 +289,8 @@ export default class TripleSBiasSorter {
 
   #applyComparisonResult(flag) {
     if (this.isComplete()) return;
-
     if (![-1, 0, 1].includes(flag)) {
-      throw new Error("Invalid flag: must be -1, 0, or 1");
+      throw new Error("Invalid preference flag");
     }
 
     if (flag === 0) {
@@ -252,21 +313,15 @@ export default class TripleSBiasSorter {
     }
 
     this.#numQuestion++;
-
-    if (this.#cmp1 < 0) {
-      this.#finishFlag = 1;
-    }
+    if (this.#cmp1 < 0) this.#finishFlag = 1;
   }
 
   #mergeLists() {
     const parentIndex = this.#parent[this.#cmp1];
-
-    for (
-      let i = 0;
-      i <
+    const mergedLength =
       this.#lstMember[this.#cmp1].length + this.#lstMember[this.#cmp2].length;
-      i++
-    ) {
+
+    for (let i = 0; i < mergedLength; i++) {
       this.#lstMember[parentIndex][i] = this.#rec[i];
     }
 
@@ -274,7 +329,6 @@ export default class TripleSBiasSorter {
     this.#lstMember.pop();
     this.#parent.pop();
     this.#parent.pop();
-
     this.#cmp1 -= 2;
     this.#cmp2 -= 2;
     this.#head1 = 0;

@@ -1,101 +1,90 @@
-# tripleS Sorter
+# WAV Sorter
 
-This project contains two main applications: a **tripleS Bias Sorter** and a **tripleS Song Sorter**. Both are designed to help fans of the K-pop group tripleS rank their favorite members and songs.
+A static, text-only pairwise ranking sorter for WAV community usernames.
 
-## tripleS Bias Sorter
+Live site: https://hxakaxinyufan.github.io/wavsorterV2/
 
-A web-based application that allows users to rank the 24 members of the K-pop group tripleS. The sorter uses a pairwise comparison model to generate a user's bias ranking.
+## Important design rule
 
-### Features
+WAV entries are usernames/text only. There are no profile pictures, avatars, member photos, image URLs, or image fallbacks attached to a WAV entry.
 
-- **Interactive Ranking:** Users are presented with pairs of members and must choose their favorite, leading to a comprehensive ranking.
-- **Responsive Design:** The application is designed to work on both desktop and mobile browsers.
-- **Shareable Results:** Users can share their ranking results on social media.
-- **Dark Mode:** A theme toggle allows users to switch between light and dark modes.
+The only images that may exist in `public/` are normal site assets such as a favicon. They are not associated with usernames.
 
-### Technologies Used
+## Main features
 
-- **HTML, CSS, JavaScript:** The core technologies for the web application.
-- **Vite:** A modern build tool that provides a fast development experience.
-- **Jest:** A JavaScript testing framework used for unit testing.
-- **PostCSS and Autoprefixer:** Used for CSS processing and ensuring cross-browser compatibility.
+- Select any subset of the 93 current WAV entries.
+- Search the selection list by username/nickname.
+- Pairwise ranking with randomized starting order.
+- Undo during sorting, including Ctrl/Cmd + Z.
+- Autosave unfinished progress to `localStorage` and resume after a refresh.
+- Saves the user's WAV selection locally.
+- Top 30 results by default, with an option to show the complete ranking.
+- Undo the final choice from the results page.
+- Download a text-only Top 30 PNG generated locally in the browser.
+- Share a Top 10 summary to X.
+- Dark mode.
+- Optional shuffled background music.
+- Keyboard support: left/right arrow keys choose the left/right WAV.
+- GitHub Pages deployment through GitHub Actions.
 
-### How to Run
+## Project structure
 
-1.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-2.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-3.  **Build for production:**
-    ```bash
-    npm run build
-    ```
+```text
+assets/
+  member-data.js     # the text-only WAV list
+  sorter-class.js    # ranking algorithm + serializable state/undo
+  sorter.js          # UI, autosave, results, music, keyboard controls
+  sorter.css         # all site styling
+public/
+  *.mp3              # local background playlist
+  robots.txt
+  sitemap.xml
+  site.webmanifest
+.github/workflows/
+  deploy.yml         # tests, builds and deploys to GitHub Pages
+```
 
-## tripleS Song Sorter
+## Update the WAV list
 
-A web-based application that allows users to rank their favorite tripleS songs. The sorter uses the Elo rating system to generate a user's song ranking.
+Edit `assets/member-data.js` only:
 
-### Features
+```js
+export const wavNames = [
+  "@username",
+  "@anotherusername (nickname)",
+];
+```
 
-- **Interactive Song Ranking:** Users are presented with pairs of songs and must choose their favorite, leading to a comprehensive ranking.
-- **Music Previews:** The application includes embedded music players from Deezer and Spotify to help users make their choices.
-- **Shareable Results:** Users can share their song ranking results on social media.
-- **Data Fetching Scripts:** The project includes scripts to fetch song data from Spotify and Deezer, compare the catalogs, and merge the data.
+Do not add image objects or avatar URLs. The application renders every name with `textContent`, so Discord names containing HTML-like characters are treated as text instead of markup.
 
-### Technologies Used
+## Run locally
 
-- **Preact:** A fast 3kB alternative to React with the same modern API.
-- **Vite:** A modern build tool that provides a fast development experience.
-- **HTML, CSS, JavaScript:** The core technologies for the web application.
-- **Deezer and Spotify APIs:** Used to fetch song data and provide music previews.
+```bash
+npm install
+npm run dev
+```
 
-### How to Run
+## Test
 
-1.  **Navigate to the `sssongs` directory:**
-    ```bash
-    cd sssongs
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-3.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-4.  **Build for production:**
-    ```bash
-    npm run build
-    ```
+```bash
+npm test -- --runInBand
+```
 
-### Scripts
+## Build
 
-The `sssongs` directory contains several scripts for managing song data:
+```bash
+npm run build
+```
 
--   `fetchSpotifySongs.js`: Fetches song data from the Spotify API.
--   `fetchDeezerSongs.js`: Fetches song data from the Deezer API.
--   `compareCatalogs.js`: Compares the song catalogs from Spotify and Deezer.
--   `mergeSongData.js`: Merges the song data from Spotify and Deezer into a single file.
--   `validateProvider.js`: Validates the provider data.
--   `setupProvider.js`: Sets up the provider data.
+The production site is deployed under `/wavsorterV2/`. If the GitHub repository is ever renamed, change `GITHUB_PAGES_BASE` in `vite.config.js`. Runtime public assets use `import.meta.env.BASE_URL`, so the path does not need to be duplicated throughout the JavaScript.
 
-## Project Structure
+## Deployment
 
-The project is organized into two main directories:
+A push to the `master` branch runs `.github/workflows/deploy.yml`:
 
--   **`/` (root):** Contains the tripleS Bias Sorter application.
--   **`/sssongs`:** Contains the tripleS Song Sorter application.
+1. `npm ci`
+2. tests
+3. Vite build
+4. deploy `dist/` to GitHub Pages
 
-Each directory contains its own `package.json`, `vite.config.js`, and `index.html` files, as well as its own set of dependencies and build processes.
-
-## Author
-
--   **@celdaris**
-
-## License
-
-This project is licensed under the MIT License.
+The GitHub repository must have Pages set to **GitHub Actions** as its deployment source.

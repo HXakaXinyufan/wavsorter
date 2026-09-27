@@ -2,158 +2,189 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>WAVs Bias Sorter - Find Your Ultimate WAVs Ranking | Bias Ranking Game</title>
-    <meta name="title" content="WAVs Bias Sorter - Find Your Ultimate WAVs Ranking | Bias Ranking Game" />
-    <meta name="description" content="Discover your ultimate WAVs bias ranking! Compare and rank your favorite WAVs using our interactive bias ranking system." />
-    <meta name="keywords" content="WAVs, bias sorter, member ranking, bias quiz, ranking game" />
+    <title>WAV Sorter</title>
+    <meta
+      name="description"
+      content="Rank WAVs with a fast, text-only pairwise sorter. Choose the WAV you prefer in each battle and get your full ranking."
+    />
     <meta name="author" content="@wav_HX" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://hxakaxinyufan.github.io/wavsorterV2/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://hxakaxinyufan.github.io/wavsorterV2/" />
-    <meta property="og:title" content="WAVs Bias Sorter - Find Your Ultimate WAVs Ranking" />
-    <meta property="og:description" content="Discover your ultimate WAVs bias ranking! Compare and rank your favorite WAVs using our interactive bias ranking system." />
-    <meta property="og:site_name" content="WAVs Bias Sorter" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="WAV Sorter" />
+    <meta
+      property="og:description"
+      content="Choose between WAVs battle by battle and generate your complete ranking."
+    />
+    <meta property="og:site_name" content="WAV Sorter" />
 
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://hxakaxinyufan.github.io/wavsorterV2/" />
-    <meta property="twitter:title" content="WAVs Bias Sorter - Find Your Ultimate WAVs Ranking" />
-    <meta property="twitter:description" content="Discover your ultimate WAVs bias ranking! Compare and rank your favorite WAVs using our interactive bias ranking system." />
-    <meta property="twitter:creator" content="@wav_HX" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="WAV Sorter" />
+    <meta
+      name="twitter:description"
+      content="Choose between WAVs battle by battle and generate your complete ranking."
+    />
+    <meta name="twitter:creator" content="@wav_HX" />
 
-    <meta name="theme-color" content="#f87fff" />
-    <meta name="msapplication-TileColor" content="#f87fff" />
+    <meta name="theme-color" content="#f06cf5" />
+    <link rel="icon" href="%BASE_URL%favicon.ico" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
 
-    <link rel="preconnect" href="https://imagedelivery.net" crossorigin />
-    <link rel="stylesheet" href="assets/sorter.css" />
-    <link rel="icon" type="image/png" href="https://i.imgur.com/ofXOn8m.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
-    <script type="module" src="assets/sorter.js"></script>
-    
-    <style>
-      /* Quick styles for the new selection grid */
-      .checkbox-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
-        text-align: left;
-        margin: 20px 0 30px 0;
-        max-height: 50vh;
-        overflow-y: auto;
-        padding: 15px;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .checkbox-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        font-size: 0.9rem;
-      }
-      .checkbox-item input {
-        cursor: pointer;
-        width: 16px;
-        height: 16px;
-        accent-color: #f87fff;
-      }
-      .controls-row {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/sorter.css" />
+    <script type="module" src="./assets/sorter.js"></script>
   </head>
 
-  <body class="song-sorter">
-    
-    <div id="dark-mode-btn" class="theme-toggle">
-      <span id="dark-mode-text" class="theme-toggle-text">#DarkMode</span>
-      <div class="theme-toggle-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </div>
+  <body>
+    <div class="top-controls" aria-label="Site controls">
+      <button id="music-toggle" class="icon-button" type="button" aria-pressed="false">
+        <span id="music-toggle-label">Music: Off</span>
+      </button>
+      <button id="dark-mode-btn" class="icon-button" type="button" aria-pressed="false">
+        <span id="dark-mode-text">Dark mode</span>
+      </button>
     </div>
-    
+
     <header class="page-header container">
-      <h1>WAVs bias sorter</h1>
-      <div>
-        <p>Choose your favorite WAV in each battle to get an accurate ranking.</p>
-      </div>
+      <p class="eyebrow">WAV COMMUNITY SORTER</p>
+      <h1>WAV Sorter</h1>
+      <p class="intro">
+        Pick the WAV you prefer in each battle. The sorter uses usernames only—there are no profile pictures or avatars.
+      </p>
     </header>
 
-    <section id="selection-screen" class="container" style="text-align: center;">
-      <h2>Select who you want to sort!</h2>
-      <p style="margin-bottom: 20px; font-size: 0.9rem; opacity: 0.8;">Uncheck anyone you don't know well enough to rank. (Select at least 2)</p>
-      
-      <div class="controls-row">
-        <button id="btn-select-all" class="result-btn" style="padding: 8px 16px; font-size: 0.9rem;">Select All</button>
-        <button id="btn-clear-all" class="result-btn" style="padding: 8px 16px; font-size: 0.9rem;">Clear All</button>
-      </div>
-
-      <div id="checkbox-container" class="checkbox-grid">
+    <main>
+      <section id="selection-screen" class="container selection-screen">
+        <div id="resume-panel" class="resume-panel is-hidden" aria-live="polite">
+          <div>
+            <strong>Unfinished sort found</strong>
+            <p id="resume-summary">You can continue where you left off.</p>
+          </div>
+          <div class="resume-actions">
+            <button id="btn-resume-sort" class="result-btn result-btn-primary" type="button">
+              Resume
+            </button>
+            <button id="btn-discard-sort" class="result-btn" type="button">
+              Discard
+            </button>
+          </div>
         </div>
 
-      <button id="btn-start-sort" class="result-btn result-btn-primary" style="font-size: 1.2rem; padding: 15px 30px; margin-bottom: 40px;">
-        Start Sorting
-      </button>
-    </section>
-    
-    <main class="page-sorter" id="page-sorter" style="display: none;">
-      <div class="container">
-        <h2 id="battleNumber" class="sorter-header">
-          <strong>Battle #1</strong><br />♡♡♡♡♡ 0% sorted
-        </h2>
+        <div class="section-heading">
+          <div>
+            <h2>Select WAVs</h2>
+            <p>Uncheck anyone you do not know well enough to rank. Select at least 2.</p>
+          </div>
+          <div id="selection-count" class="selection-count" aria-live="polite">0 selected</div>
+        </div>
+
+        <label class="search-field" for="wav-search">
+          <span class="sr-only">Search WAV usernames</span>
+          <input
+            id="wav-search"
+            type="search"
+            placeholder="Search username or nickname…"
+            autocomplete="off"
+          />
+        </label>
+
+        <div class="selection-actions">
+          <button id="btn-select-all" class="result-btn" type="button">Select all</button>
+          <button id="btn-clear-all" class="result-btn" type="button">Clear all</button>
+          <button id="btn-reset-selection" class="result-btn" type="button">Reset saved selection</button>
+        </div>
+
+        <div id="checkbox-container" class="checkbox-grid" aria-label="WAV selection"></div>
+
+        <div id="no-search-results" class="empty-search is-hidden">
+          No WAV matches that search.
+        </div>
+
+        <button id="btn-start-sort" class="result-btn result-btn-primary start-button" type="button">
+          Start sorting
+        </button>
+      </section>
+
+      <section id="page-sorter" class="container battle-page is-hidden" aria-labelledby="battleNumber">
+        <div class="progress-shell">
+          <h2 id="battleNumber" class="sorter-header" aria-live="polite">
+            Battle #1 · 0% sorted
+          </h2>
+          <div
+            id="progress-track"
+            class="progress-track"
+            role="progressbar"
+            aria-label="Sorting progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
 
         <div class="sorter-game">
           <div class="main-battle">
-            <div id="optionA" class="sorter-option" style="--member-color: #f87fff">
-              <div class="photocard-info no-image">
-                <div class="member-name">Loading...</div>
-              </div>
-            </div>
-            <div class="versus"><span>vs</span></div>
-            <div id="optionB" class="sorter-option" style="--member-color: #f87fff">
-              <div class="photocard-info no-image">
-                <div class="member-name">Loading...</div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="margin-top: 15px;">
-             <button id="undo-btn" class="undo-btn">Undo Move</button>
+            <button id="optionA" class="sorter-option" type="button" aria-label="Choose left WAV">
+              <span class="member-name">Loading…</span>
+            </button>
+
+            <div class="versus" aria-hidden="true"><span>VS</span></div>
+
+            <button id="optionB" class="sorter-option" type="button" aria-label="Choose right WAV">
+              <span class="member-name">Loading…</span>
+            </button>
           </div>
 
+          <p class="keyboard-hint">Keyboard: ← chooses left · → chooses right · Ctrl/Cmd + Z undoes</p>
+
+          <div class="battle-actions">
+            <button id="undo-btn" class="result-btn" type="button" disabled>Undo</button>
+            <button id="btn-exit-sort" class="text-button" type="button">Change selection</button>
+          </div>
         </div>
+      </section>
+
+      <section id="page-result" class="container result-page is-hidden">
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow">SORT COMPLETE</p>
+            <h2>Your WAV ranking</h2>
+          </div>
+          <p id="result-count" class="result-count"></p>
+        </div>
+
+        <div id="battleResult" class="results-list"></div>
+
+        <div class="result-actions">
+          <button id="showMore" class="result-btn" type="button">Show all</button>
+          <button id="btn-undo-result" class="result-btn" type="button">Undo last choice</button>
+          <button id="download-result" class="result-btn" type="button">Download Top 30 PNG</button>
+          <a id="tweet-button" class="result-btn" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">
+            Share to X
+          </a>
+          <button id="btn-replay" class="result-btn result-btn-primary" type="button">Sort again</button>
+          <button id="btn-change-selection" class="result-btn" type="button">Change selection</button>
+        </div>
+      </section>
     </main>
 
-    <section class="page-result">
-      <div class="container">
-        <div id="battleResult"></div>
-        <a id="showMore" style="display: none; cursor: pointer">Show More</a>
-        <br />
-        <a id="tweet-button" class="result-btn result-btn-primary" style="display: none" href="">
-          Share to X
-        </a>
-      </div>
-    </section>
-
     <footer class="page-footer">
-      <a href="https://x.com/wav_HX" class="footer-link author-link">
-        stolen from <span class="accent-text">@celdaris</span> by <span class="accent-text">@wav_HX</span>
+      <a href="https://x.com/wav_HX" target="_blank" rel="noopener">
+        forked from @celdaris · maintained by @wav_HX
       </a>
     </footer>
 
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="preload" as="style" onload="this.onload = null; this.rel = 'stylesheet';" />
-    
-    <audio id="bg-music"></audio>
+    <audio id="bg-music" preload="none"></audio>
   </body>
 </html>

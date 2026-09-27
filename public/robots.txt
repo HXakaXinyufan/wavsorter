@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://sssorter.pages.dev/sitemap.xml
-
-# Crawl delay (be respectful)
-Crawl-delay: 1
+Sitemap: https://hxakaxinyufan.github.io/wavsorterV2/sitemap.xml

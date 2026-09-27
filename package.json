@@ -1,7 +1,7 @@
 {
-  "name": "triples-bias-sorter",
-  "version": "1.0.0",
-  "description": "tripleS bias sorter with cute K-pop design",
+  "name": "wav-sorter",
+  "version": "3.0.0",
+  "description": "Text-only WAV community pairwise ranking sorter",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,12 +19,12 @@
     "vite": "^6.0.0"
   },
   "keywords": [
-    "kpop",
-    "triples",
-    "bias",
+    "wav",
     "sorter",
-    "ranking"
+    "ranking",
+    "discord",
+    "triples"
   ],
-  "author": "",
+  "author": "@wav_HX",
   "license": "MIT"
 }

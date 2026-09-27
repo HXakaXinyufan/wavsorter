@@ -1,14 +1,9 @@
 {
-  "name": "tripleS Song Sorter",
-  "short_name": "Song SSSorter",
-  "icons": [
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ],
-  "theme_color": "#ff6b9d",
-  "background_color": "#0a0a0a",
-  "display": "standalone"
+  "name": "WAV Sorter",
+  "short_name": "WAV Sorter",
+  "start_url": "/wavsorterV2/",
+  "scope": "/wavsorterV2/",
+  "display": "standalone",
+  "theme_color": "#f06cf5",
+  "background_color": "#fff8ff"
 }

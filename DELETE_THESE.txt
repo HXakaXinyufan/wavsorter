@@ -1,0 +1,11 @@
+Delete these obsolete files from the old wavsorterV2 repository if they still exist:
+
+.gitmodules
+404.html
+build-songs.sh
+bun.lock
+google63b955d49c220275.html
+pic-updater.cjs
+postcss.config.js
+public/main-og-image.jpg
+public/og-image.jpg
