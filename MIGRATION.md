@@ -1,12 +1,12 @@
-# Upgrade wavsorterV2 to V3
+# Upgrade wavsorter to V3
 
 This upgrade is designed for the existing GitHub Pages repository:
 
-`https://github.com/HXakaXinyufan/wavsorterV2`
+`https://github.com/HXakaXinyufan/wavsorter`
 
 Live base path:
 
-`https://hxakaxinyufan.github.io/wavsorterV2/`
+`https://hxakaxinyufan.github.io/wavsorter/`
 
 ## 1. Back up the current version
 
@@ -119,7 +119,7 @@ To add/remove/rename a WAV later, only edit this array.
 
 ### GitHub Pages
 
-- `vite.config.js` contains the deployment base path in one constant: `/wavsorterV2/`
+- `vite.config.js` contains the deployment base path in one constant: `/wavsorter/`
 - audio URLs use `import.meta.env.BASE_URL`
 - corrected robots.txt, sitemap and web manifest
 - GitHub Actions now runs tests before deploying

@@ -2,7 +2,7 @@
 
 A static, text-only pairwise ranking sorter for WAV community usernames.
 
-Live site: https://hxakaxinyufan.github.io/wavsorterV2/
+Live site: https://hxakaxinyufan.github.io/wavsorter/
 
 ## Important design rule
 
@@ -76,7 +76,7 @@ npm test -- --runInBand
 npm run build
 ```
 
-The production site is deployed under `/wavsorterV2/`. If the GitHub repository is ever renamed, change `GITHUB_PAGES_BASE` in `vite.config.js`. Runtime public assets use `import.meta.env.BASE_URL`, so the path does not need to be duplicated throughout the JavaScript.
+The production site is deployed under `/wavsorter/`. If the GitHub repository is ever renamed, change `GITHUB_PAGES_BASE` in `vite.config.js`. Runtime public assets use `import.meta.env.BASE_URL`, so the path does not need to be duplicated throughout the JavaScript.
 
 ## Deployment
 

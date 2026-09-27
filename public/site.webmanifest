@@ -1,8 +1,8 @@
 {
   "name": "WAV Sorter",
   "short_name": "WAV Sorter",
-  "start_url": "/wavsorterV2/",
-  "scope": "/wavsorterV2/",
+  "start_url": "/wavsorter/",
+  "scope": "/wavsorter/",
   "display": "standalone",
   "theme_color": "#f06cf5",
   "background_color": "#fff8ff"

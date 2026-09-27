@@ -538,7 +538,7 @@ function buildShareUrl(sortedMembers) {
   const top = sortedMembers.slice(0, 10);
   const lines = [`My WAV Sorter Top ${top.length}:`];
   top.forEach((name, index) => lines.push(`${index + 1}. ${name}`));
-  lines.push("", "https://hxakaxinyufan.github.io/wavsorterV2/");
+  lines.push("", "https://hxakaxinyufan.github.io/wavsorter/");
 
   const params = new URLSearchParams({ text: lines.join("\n") });
   return `https://twitter.com/intent/tweet?${params.toString()}`;
@@ -670,7 +670,7 @@ async function downloadRankingImage() {
 
   ctx.fillStyle = muted;
   ctx.font = "600 21px Nunito, Arial, sans-serif";
-  ctx.fillText("hxakaxinyufan.github.io/wavsorterV2/", 70, 1300);
+  ctx.fillText("hxakaxinyufan.github.io/wavsorter/", 70, 1300);
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
   if (!blob) return;

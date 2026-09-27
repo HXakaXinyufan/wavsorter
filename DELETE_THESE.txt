@@ -1,4 +1,4 @@
-Delete these obsolete files from the old wavsorterV2 repository if they still exist:
+Delete these obsolete files from the old wavsorter repository if they still exist:
 
 .gitmodules
 404.html

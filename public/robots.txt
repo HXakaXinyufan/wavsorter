@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hxakaxinyufan.github.io/wavsorterV2/sitemap.xml
+Sitemap: https://hxakaxinyufan.github.io/wavsorter/sitemap.xml
